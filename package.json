@@ -1,6 +1,7 @@
 {
   "name": "classius",
   "version": "0.1.0",
+  "proxy": "http://localhost:3000/",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.2",
@@ -9,15 +10,21 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "autoprefixer": "^9.8.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "meta-extractor": "^2.1.0",
+    "mongoose": "^5.12.12",
     "postcss": "^7.0.35",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "react-tiny-link": "^3.6.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
+    "watch": "nodemon ./src/server/server.js",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
@@ -42,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "nodemon": "^2.0.7",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0"
   }
