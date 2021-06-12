@@ -4,14 +4,14 @@
 
 const mongoose = require("mongoose")
 
-const Schema = mongoose.Schema;
-const groupSchema = new Schema({
+const groupSchema = mongoose.Schema({
     groupName: {
         type: String,
         required: true
     },
-    courses: Array
-}, {timestamps: true})
+    courses: Array,
+    routeId: String,
+}, {timestamps: true});
 
 const Group = mongoose.model("Group", groupSchema)
 
