@@ -4,12 +4,24 @@
 
 const mongoose = require("mongoose")
 
+const courseSchema = mongoose.Schema({
+    url: {
+        type: String,
+        required: true
+    },
+    likeCount: {
+        default: 0,
+        type: Number
+    },
+    likers: Array,
+}, {timestamps: true});
+
 const groupSchema = mongoose.Schema({
     groupName: {
         type: String,
         required: true
     },
-    courses: Array,
+    courses: [courseSchema],
     routeId: String,
 }, {timestamps: true});
 
