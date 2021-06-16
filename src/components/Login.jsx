@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState  } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
 function Login() {
@@ -25,9 +25,10 @@ function Login() {
         const data = await res.json()
         localStorage.setItem("token", data.token)
         setErrorMessage(data.message)
+        await history.push("/")
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         fetch("/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
@@ -38,15 +39,15 @@ function Login() {
     }, [])
 
     return (
-        <div>
-            <div>Login</div>
-            <form onSubmit={(e) => handleLogin(e)}>
+        <div className="text-white flex flex-col h-screen w-screen items-center justify-center">
+            <div className="p-5 text-3xl font-extrabold">Login</div>
+            <form className="mx-5 flex flex-col w-72" onSubmit={(e) => handleLogin(e)}>
                 <label htmlFor="username">Username</label>
-                <input type="text" required name="username" id="username" />
+                <input className="text-black m-3 border-2 border-green-400 p-1" type="text" required name="username" id="username" />
                 <label htmlFor="password">Password</label>
-                <input type="password" required name="password" id="password" />
-                <input type="submit" value="Login"/>
-                <Link to="/register">Register</Link>
+                <input className="text-black m-3 border-2 border-green-400 p-1" type="password" required name="password" id="password" />
+                <input className="m-1 px-2 py-1 rounded font-bold text-xl bg-green-400 text-gray-900" type="submit" value="Login"/>
+                <Link className="text-center m-1 px-2 py-1 rounded font-bold text-xl border-2 border-green-400 text-green-400" to="/register">Register</Link>
             </form>
             {errorMessage === "Success" ? <Redirect to="/"/>: <div>{errorMessage}</div>}
         </div>
