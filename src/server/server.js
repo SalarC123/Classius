@@ -5,8 +5,6 @@ const mongoose = require("mongoose")
 const metaExtract = require("meta-extractor")
 const cors = require('cors')
 const router = require("./router.js")
-const passport = require("passport")
-const passportStrategy = require("./passport")
 
 const app = express()
 
@@ -15,9 +13,6 @@ app.use(cors())
 // use bodyparser middleware to receive form data
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(bodyParser.json(), urlencodedParser)
-
-app.use(passport.initialize())
-passportStrategy(passport)
 
 app.use("/", router)
 
