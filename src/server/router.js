@@ -22,7 +22,9 @@ function verifyJWT(req, res, next) {
     if (token) {
         jwt.verify(token, process.env.PASSPORTSECRET, (err, decoded) => {
             if (err) return res.json({isLoggedIn: false, message: "Failed To Authenticate"})
-            req.userId = decoded.id
+            req.user = {};
+            req.user.id = decoded.id
+            req.user.username = decoded.username
             next()
         })
     } else {
@@ -31,7 +33,7 @@ function verifyJWT(req, res, next) {
 }
 
 router.get("/isUserAuth", verifyJWT, (req, res) => {
-    res.json({isLoggedIn: true})
+    res.json({isLoggedIn: true, username: req.user.username})
 })
 
 router.get("/creategroup", (req, res) => {
@@ -46,6 +48,7 @@ function routify(text) {
 }
 
 router.post("/creategroup", (req, res) => {
+    
     // creates group from Group model and saves it to the database
     function createGroup() {
         const group = new Group({
@@ -69,6 +72,7 @@ router.post("/creategroup", (req, res) => {
 router.get("/g/:groupId", (req, res) => {
     Group.find({routeId: req.params.groupId})
         .then(result => res.json(result))
+        .catch(err => res.json({message: err}))
 })
 
 router.get("/login", (req, res) => {
@@ -81,24 +85,25 @@ router.post("/login", (req, res) => {
     User.findOne({username: userLoggingIn.username.toLowerCase()})
     .then(dbUser => {
         if (!dbUser) {
-            return res.json({message: "User not found"})
+            return res.json({message: "Invalid Username or Password"})
         }
         bcrypt.compare(userLoggingIn.password, dbUser.password)
         .then(isCorrect => {
             if (isCorrect) {
                 const payload = {
                     id: dbUser._id,
+                    username: dbUser.username,
                 }
                 jwt.sign(
                     payload, 
                     process.env.PASSPORTSECRET,
-                    {expiresIn: 2500},
+                    {expiresIn: 86400},
                     (err, token) => {
                         return res.json({message: "Success", token: "Bearer " + token})
                     }
                 )
             } else {
-                return res.json({message: "Password incorrect"})
+                return res.json({message: "Invalid Username or Password"})
             }
         })
 
@@ -131,21 +136,30 @@ router.post("/register", async (req, res) => {
     }
 })
 
-router.post("/updateLikes", (req, res) => {
+router.post("/updateLikes", verifyJWT, (req, res) => {
+    const currentUser = req.user
+
     const groupName = req.body.groupName
-    const course = req.body.course
+    const courseUrl = req.body.course.url
 
-    Group.findOne({ groupName: groupName })
-    .then(group => console.log(group))
+    Group.find(
+        {groupName: groupName, "courses.url": courseUrl},
+        {"courses.$": 1},
+    )
+    .then(response => response[0].courses[0].likers)
+    .then(likers => {
+        likers.includes(currentUser.username) 
+        ? updateLikeCount(-1, "pull")
+        : updateLikeCount(1, "push")
+    })
 
-    // check likesUpdated property on course
-    // if true, set countValue to -1
-    // else, set countValue to 1
-    // updateOne to update count
-
-    // Group.updateOne({ groupName: groupName }, {
-    //     $set: {courses: }
-    // })
+    function updateLikeCount(num, modifyListType) {
+        Group.updateOne(
+            {groupName: groupName, "courses.url": courseUrl},
+            {$inc: {"courses.$.likeCount": num}, [`$${modifyListType}`]: {"courses.$.likers": currentUser.username}},
+            (updateRes) => updateRes
+        )
+    }
 })
 
 

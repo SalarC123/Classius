@@ -2,29 +2,30 @@ import CourseForm from './CourseForm'
 import GroupSearch from './GroupSearch'
 import Groups from './Groups'
 import { Link, useHistory } from 'react-router-dom'
+import { useLayoutEffect } from 'react'
+import { useState } from 'react'
+import Navbar from './Navbar'
 
 function HomePage() {
 
     const history = useHistory()
+    const [username, setUsername] = useState("")
 
-    function logout() {
-        localStorage.removeItem("token")
-        history.push("/login")
-
-        // redirect on click with redirect component
-    }
+    useLayoutEffect(() => {
+        fetch("/isUserAuth", {
+            headers: {
+                "x-access-token": localStorage.getItem("token")
+            }
+        })
+        .then(res => res.json())
+        .then(data => data.isLoggedIn ? setUsername(data.username): history.push("/login"))
+    }, [])
 
     return (
         <div>
-            <div className="m-8 border-4 border-black">
-                <div>
-                    <Link to="/login">Login</Link>
-                </div>
-                <div>
-                    <Link to="/register">Register</Link>
-                </div>
-                <div className="cursor-pointer" onClick={logout}>Logout</div>
-            </div>
+            <Navbar/>
+
+            <h1 className="font-extrabold m-8 text-green-400 text-3xl">Welcome, {username}</h1>
 
             <CourseForm/>
             <GroupSearch/>

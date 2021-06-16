@@ -10,9 +10,9 @@ function GroupSearch() {
     }
 
     return (
-        <div>
+        <div className="text-white m-8">
             <label>Search</label>
-            <input className="border-2 border-yellow-300 p-2 m-2" type="text" onKeyDown={e => e.which === 13 ? search(e.target.value) : null }/>
+            <input className="border-2 border-green-400 p-2 m-2 text-black" type="text" onKeyDown={e => e.which === 13 ? search(e.target.value) : null }/>
             <svg 
                 /* grabs value of previous element on click */
                 onClick={(e) => search(e.target.parentElement.children[1].value)} 
