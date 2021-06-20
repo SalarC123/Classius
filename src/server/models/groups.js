@@ -14,6 +14,10 @@ const courseSchema = mongoose.Schema({
         type: Number
     },
     likers: Array,
+    ogTitle: String,
+    ogImage: String,
+    ogDesc: String,
+    ogSiteName: String,
 }, {timestamps: true});
 
 const groupSchema = mongoose.Schema({

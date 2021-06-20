@@ -1,5 +1,6 @@
 import { useEffect, useState, useLayoutEffect } from "react";
 import { useHistory } from 'react-router-dom'
+import Navbar from './Navbar'
 
 function GroupPage({ match }) {
 
@@ -39,18 +40,29 @@ function GroupPage({ match }) {
     // FIX ERROR WHEN GROUP IS UNDEFINED (Error Boundary)
 
     return (
-        <div className="text-white">
-            <div>{group.groupName}</div>
-            {group.courses
-                ? group.courses.map(course => (
-                    <div className="m-8">
-                        <div>{course.url}</div>
-                        <button onClick={() => updateLikes(group.groupName, course)}>{course.likeCount}</button>
-                    </div>
-                ))
-                : <div>Loading...</div>
-            }
-        </div>
+        <>
+            <Navbar/>
+            <div className="text-white bg-gray-900 h-full">
+                <div className="text-3xl font-extrabold p-8">{group.groupName}</div>
+                <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 py-2 m-4 place-items-center">
+                    {group.courses
+                        ? group.courses.map(course => (
+                            <div className="rounded-xl p-5 flex flex-col items-center bg-gray-800 bg-opacity-40">
+                                <a href={course.url} target="_blank" className="hover:underline font-bold text-2xl mb-2 text-center">{course.ogTitle}</a>
+                                <p className="text-gray-400 mb-4 text-md">{course.ogSiteName}</p>
+                                <img className="w-60 h-42 mb-4" src={course.ogImage} alt="" />
+                                <div className="mb-2 text-lg text-center">{course.ogDesc}</div>
+                                <svg onClick={() => updateLikes(group.groupName, course)} xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <div className="mx-3 my-2">{course.likeCount}</div>
+                            </div>
+                        ))
+                        : <div>Loading...</div>
+                    }
+                </div>
+            </div>
+        </>
     )
 }
 
