@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState  } from 'react';
 import { Link, Redirect, useHistory } from 'react-router-dom'
+import ValidationError from './ValidationError'
 
 function Login() {
 
@@ -25,7 +26,6 @@ function Login() {
         const data = await res.json()
         localStorage.setItem("token", data.token)
         setErrorMessage(data.message)
-        await history.push("/")
     }
 
     useLayoutEffect(() => {
@@ -43,13 +43,13 @@ function Login() {
             <div className="p-5 text-3xl font-extrabold">Login</div>
             <form className="mx-5 flex flex-col w-72" onSubmit={(e) => handleLogin(e)}>
                 <label htmlFor="username">Username</label>
-                <input className="text-black m-3 border-2 border-green-400 p-1" type="text" required name="username" id="username" />
+                <input className="text-black m-3 border-2 border-green-400 p-1" type="text" name="username" id="username" />
                 <label htmlFor="password">Password</label>
-                <input className="text-black m-3 border-2 border-green-400 p-1" type="password" required name="password" id="password" />
+                <input className="text-black m-3 border-2 border-green-400 p-1" type="password" name="password" id="password" />
                 <input className="m-1 px-2 py-1 rounded font-bold text-xl bg-green-400 text-gray-900" type="submit" value="Login"/>
                 <Link className="text-center m-1 px-2 py-1 rounded font-bold text-xl border-2 border-green-400 text-green-400" to="/register">Register</Link>
             </form>
-            {errorMessage === "Success" ? <Redirect to="/"/>: <div>{errorMessage}</div>}
+            {errorMessage === "Success" ? <Redirect to="/"/>: <ValidationError message={errorMessage} />}
         </div>
     )
 }
