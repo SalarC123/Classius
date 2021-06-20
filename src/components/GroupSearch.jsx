@@ -5,8 +5,20 @@ function GroupSearch() {
     const groups = useSelector(store => store.groupsReducer)
     const dispatch = useDispatch()
 
-    function search(searchTerm) {
-        dispatch({type: "FILTER-GROUPS", payload: groups.filter(item => item.groupName.toLowerCase().includes(searchTerm))})
+    // function search(searchTerm) {
+    //     dispatch({type: "FILTER-GROUPS", payload: groups.filter(item => item.groupName.toLowerCase().includes(searchTerm))})
+    // }
+
+    async function search(searchTerm) {
+        const res = await fetch("/searchfilter", {
+            method:"POST",
+            headers: {
+                "Content-type":"application/json",
+            },
+            body: JSON.stringify({searchTerm: searchTerm})
+        })
+        const data = await res.json()
+        dispatch({type: "SET-GROUPS", payload: data})
     }
 
     return (
