@@ -13,6 +13,8 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    pfp: String,
+    bio: String
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema)
