@@ -53,6 +53,18 @@ function CourseForm() {
         : console.log("No more than 10 courses are allowed per group")
     }
 
+    function removeCourseInput() {
+        inputCourses.length > 2
+        ? setInputCourses(inputCourses.slice(0, inputCourses.length - 1))
+        : console.log("No less than 2 courses are allowed per group")
+    }
+
+    function addCourseInput() {
+        inputCourses.length < 10
+        ? setInputCourses([...inputCourses, inputCourses[inputCourses.length-1]+1])
+        : console.log("No more than 10 courses are allowed per group")
+    }
+
     return (
         <>
             <form className="flex flex-col m-10 text-md border-4 p-6 border-white text-white" onSubmit={(e) => handleSubmit(e)}>

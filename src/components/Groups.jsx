@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { useState } from 'react';
 
 function Groups() {
 
@@ -15,6 +16,10 @@ function Groups() {
         })
         .catch(err => console.log(err))
     }, [dispatch])
+
+    function getFirstFourCourses(group) {
+        return group.courses.slice(0, 4)
+    }
 
     function getFirstFourCourses(group) {
         return group.courses.slice(0, 4)

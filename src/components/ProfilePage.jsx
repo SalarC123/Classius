@@ -17,7 +17,6 @@ function ProfilePage({ match }) {
             setUser(data)
         })
     }, [userId])
-
     async function changeUserInfo(e) {
         e.preventDefault();
         const form = e.target
