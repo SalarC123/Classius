@@ -38,7 +38,7 @@ function Register () {
             }
         })
         .then(res => res.json())
-        .then(data => data.isLoggedIn ? history.push("/"): null)
+        .then(data => data.isLoggedIn ? history.push("/dashboard"): null)
     }, [])
 
     return (
@@ -52,7 +52,10 @@ function Register () {
                 <label htmlFor="password">Password</label>
                 <input className="text-black m-3 border-2 border-green-400 p-1" type="password" name="password" id="password" />
                 <input className="m-1 px-2 py-1 rounded font-bold text-xl bg-green-400 text-gray-900" type="submit" value="Register" />
-                <Link className="m-1 px-2 py-1 rounded font-bold text-xl border-2 border-green-400 text-green-400 text-center" to="/login">Login</Link>
+                <div className="flex flex-row items-center justify-center">
+                    <h1>Already have an account?</h1>
+                    <Link className="m-1 px-2 py-1 rounded font-bold text-xl border-2 border-green-400 text-green-400 text-center" to="/login">Login</Link>
+                </div>
                 {errorMessage === "Success" ? <Redirect to="/login"/>: <ValidationError message={errorMessage} />}
             </form>
         </div>
