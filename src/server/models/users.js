@@ -14,7 +14,8 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     pfp: String,
-    bio: String
+    bio: String,
+    createdGroups: Array,
 }, {timestamps: true})
 
 const User = mongoose.model("User", userSchema)
