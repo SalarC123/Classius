@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 const User = require("./models/users")
 const jwt = require("jsonwebtoken")
 const gravatar = require("gravatar")
-const {registrationValidation, loginValidation} = require("./validation")
+const {registrationValidation, loginValidation, groupValidation} = require("./validation")
 const ogs = require("open-graph-scraper")
 
 
@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
 })
 
 router.get("/groups", (req, res) => {
-    Group.find()
+    Group.find().sort({popularity: "descending"}).limit(50)
     .then(groups => res.json(groups))
     .catch(err => console.log(err))
 })
@@ -53,37 +53,57 @@ function routify(text) {
     return lowerCaseText.replace(/ /g, "-")
 }
 
-router.post("/creategroup", async (req, res) => {
-
-    //CHECK WHICH USER CREATED THE GROUP AND ADD IT 
-    // TO THEIR PROFILE (ADD POSTS TO USER SCHEMA)
-
-    const courses = []
-
-    for (courseURL of req.body.courses) {
-        let ogData = {url: courseURL, likeCount: 0, likers: []};
-
-        const res = await ogs({url: courseURL})
-        const data = await res.result
-
-        ogData.ogTitle = data.ogTitle
-        ogData.ogImage = data.ogImage.url
-        ogData.ogDesc = data.ogDescription
-        ogData.ogSiteName = data.ogSiteName
-        
-        courses.push(ogData)
-    }
+router.post("/creategroup", verifyJWT, async (req, res) => {
     
+    const currentUser = req.user;
+    const routifiedGroupName = routify(req.body.groupName)
+
+    const validationError = groupValidation(req.body).error
+
+    if (validationError) {
+        return res.json({message: validationError.details[0].message})
+    }
+
     // creates group from Group model and saves it to the database
     async function createGroup() {
-        const group = new Group({
-            groupName: req.body.groupName,
-            courses: courses,
-            routeId: routify(req.body.groupName)
-        })
-    
-        await group.save()
-        return res.json({message: "Success", groupURL: routify(req.body.groupName)})
+        try {
+            const courses = []
+
+            // fetch open graph data 
+            for (courseURL of req.body.courses) {
+                let ogData = {url: courseURL, likeCount: 0, likers: []};
+
+                const res = await ogs({url: courseURL})
+                const data = await res.result
+                
+                if (!data.success || !data.ogTitle) continue;
+
+                ogData.ogTitle = data.ogTitle
+                ogData.ogImage = data.ogImage?.url
+                ogData.ogDesc = data.ogDescription
+                ogData.ogSiteName = data.ogSiteName
+                
+                courses.push(ogData)
+            }
+
+            const group = new Group({
+                groupName: req.body.groupName,
+                courses: courses,
+                routeId: routifiedGroupName
+            })
+        
+            await group.save()
+
+            User.updateOne(
+                {username: currentUser.username},
+                {$push: {createdGroups: {groupName: req.body.groupName, url: "/g/" + routifiedGroupName}}},
+                updateRes => updateRes
+            )
+
+            return res.json({message: "Success", groupURL: routifiedGroupName})
+        } catch (err) {
+            res.json({message: "Invalid URL provided"})
+        }
     }
 
     // checks if group with same name has already been created
@@ -177,7 +197,8 @@ router.post("/register", async (req, res) => {
             email: user.email.toLowerCase(),
             password: user.password,
             pfp: gravatar.url(user.email.toLowerCase(),  {s: '100', r: 'x', d: 'retro'}, true),
-            bio: user.username.toLowerCase() + " has not set a bio yet"
+            bio: user.username.toLowerCase() + " has not set a bio yet",
+            createdGroups: [],
         })
 
         dbUser.save()
@@ -208,10 +229,25 @@ router.post("/updateLikes", verifyJWT, (req, res) => {
             {$inc: {"courses.$.likeCount": num}, [`$${modifyListType}`]: {"courses.$.likers": currentUser.username}},
             (updateRes) => updateRes
         )
+
+        // update popularity level of each group
+        if (modifyListType == "push") {
+            Group.updateOne(
+                {groupName: groupName},
+                {$inc: {popularity: 1}},
+                updateRes => updateRes
+            )
+        } else {
+            Group.updateOne(
+                {groupName: groupName},
+                {$inc: {popularity: -1}},
+                updateRes => updateRes
+            )
+        }
     }
 })
 
-router.get("/u/:userId", verifyJWT,(req, res) => {
+router.get("/u/:userId", verifyJWT, (req, res) => {
     const username = req.params.userId;
 
     User.findOne({username: username})
@@ -219,7 +255,8 @@ router.get("/u/:userId", verifyJWT,(req, res) => {
         username: dbUser.username, 
         canEdit: dbUser.username == req.user.username, 
         pfp: dbUser.pfp,
-        bio: dbUser.bio
+        bio: dbUser.bio,
+        createdGroups: dbUser.createdGroups,
     }))
     .catch(err => res.json({
         username: "User Not Found", 
