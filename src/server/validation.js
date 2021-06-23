@@ -19,10 +19,20 @@ const loginValidation = (data => {
     return loginSchema.validate(data);
 })
 
+const groupSchema = Joi.object({
+    groupName: Joi.string().required().min(3).max(100),
+    courses: Joi.array().items(Joi.string().uri()).unique()
+})
+
+const groupValidation = data => {
+    return groupSchema.validate(data)
+}
+
 
 
 
 module.exports = {
     registrationValidation: registrationValidation,
     loginValidation: loginValidation,
+    groupValidation: groupValidation
 }

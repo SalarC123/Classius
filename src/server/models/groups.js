@@ -27,6 +27,10 @@ const groupSchema = mongoose.Schema({
     },
     courses: [courseSchema],
     routeId: String,
+    popularity: {
+        default: 0,
+        type: Number,
+    }
 }, {timestamps: true});
 
 const Group = mongoose.model("Group", groupSchema)

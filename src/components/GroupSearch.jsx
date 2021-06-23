@@ -1,8 +1,7 @@
-import {  useSelector, useDispatch } from 'react-redux'
+import {  useDispatch } from 'react-redux'
 
 function GroupSearch() {
 
-    const groups = useSelector(store => store.groupsReducer)
     const dispatch = useDispatch()
 
     // function search(searchTerm) {
