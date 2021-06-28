@@ -20,6 +20,6 @@ const dbURI = `mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPAS
 mongoose.connect(dbURI, { useNewUrlParser:true, useUnifiedTopology:true })
     .then((res) => {
         // only listen for requests once database data has loaded
-        app.listen(process.env.PORT, () => console.log("Server is up on port " + process.env.PORT))
+        app.listen(process.env.SERVERPORT, () => console.log("Server is up on port " + process.env.SERVERPORT))
     })
     .catch(err => console.log(err))
