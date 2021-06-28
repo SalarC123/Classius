@@ -39,7 +39,7 @@ function Register () {
         })
         .then(res => res.json())
         .then(data => data.isLoggedIn ? history.push("/dashboard"): null)
-    }, [])
+    }, [history])
 
     return (
         <div className="text-white flex flex-col h-screen w-screen items-center justify-center">
