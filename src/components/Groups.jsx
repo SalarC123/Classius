@@ -21,10 +21,6 @@ function Groups() {
         return group.courses.slice(0, 4)
     }
 
-    function getFirstFourCourses(group) {
-        return group.courses.slice(0, 4)
-    }
-
     return (
         <section className="text-gray-400 bg-gray-900 body-font">
             <h1 className="text-center text-5xl font-extrabold text-green-500">Most Popular</h1>
@@ -39,11 +35,11 @@ function Groups() {
                                 <div className="grid grid-cols-2 grid-rows-2 gap-2">
                                     {/* Only display images of the first four courses */}
                                     {getFirstFourCourses(group).map(course => (
-                                        <img className="w-full" src={course.ogImage} onError={(e)=>{e.target.onerror = null; e.target.src=""}}/>
+                                        <img className="w-full" src={course.ogImage} alt="Custom Course" onError={(e)=>{e.target.onerror = null; e.target.src=""}}/>
                                     ))}
                                 </div>
                                 <Link to={"/g/" + group.routeId} className="text-green-400 inline-flex items-center mt-3">See Courses
-                                    <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M5 12h14"></path>
                                     <path d="M12 5l7 7-7 7"></path>
                                     </svg>
