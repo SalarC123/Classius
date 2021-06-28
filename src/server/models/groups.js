@@ -18,6 +18,7 @@ const courseSchema = mongoose.Schema({
     ogImage: String,
     ogDesc: String,
     ogSiteName: String,
+    comments: Array,
 }, {timestamps: true});
 
 const groupSchema = mongoose.Schema({
