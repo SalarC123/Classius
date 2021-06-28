@@ -7,7 +7,6 @@ const gravatar = require("gravatar")
 const {registrationValidation, loginValidation, groupValidation} = require("./validation")
 const ogs = require("open-graph-scraper")
 
-
 const router = express.Router()
 
 router.get("/", (req, res) => {
@@ -71,7 +70,7 @@ router.post("/creategroup", verifyJWT, async (req, res) => {
 
             // fetch open graph data 
             for (courseURL of req.body.courses) {
-                let ogData = {url: courseURL, likeCount: 0, likers: []};
+                let ogData = {url: courseURL, likeCount: 0, likers: [], comments: []};
 
                 const res = await ogs({url: courseURL})
                 const data = await res.result
@@ -136,7 +135,10 @@ router.get("/login", (req, res) => {
 })
 
 router.post("/login", (req, res) => {
+    
     const userLoggingIn = req.body;
+
+    if (!userLoggingIn) return res.json({message: "Server Error"})
 
     const validationError = loginValidation(userLoggingIn).error
 
@@ -210,10 +212,10 @@ router.post("/updateLikes", verifyJWT, (req, res) => {
     const currentUser = req.user
 
     const groupName = req.body.groupName
-    const courseUrl = req.body.course.url
+    const courseURL = req.body.course.url
 
     Group.find(
-        {groupName: groupName, "courses.url": courseUrl},
+        {groupName: groupName, "courses.url": courseURL},
         {"courses.$": 1},
     )
     .then(response => response[0].courses[0].likers)
@@ -225,7 +227,7 @@ router.post("/updateLikes", verifyJWT, (req, res) => {
 
     function updateLikeCount(num, modifyListType) {
         Group.updateOne(
-            {groupName: groupName, "courses.url": courseUrl},
+            {groupName: groupName, "courses.url": courseURL},
             {$inc: {"courses.$.likeCount": num}, [`$${modifyListType}`]: {"courses.$.likers": currentUser.username}},
             (updateRes) => updateRes
         )
@@ -245,6 +247,20 @@ router.post("/updateLikes", verifyJWT, (req, res) => {
             )
         }
     }
+})
+
+router.post("/setHeartColors", verifyJWT, async (req, res) => {
+    const heartColors = []
+    const currentUser = req.user
+
+    const group = await Group.find({routeId: req.body.groupId})
+    for (course of group[0].courses) {
+        course.likers.includes(currentUser.username)
+        ? heartColors.push("red")
+        : heartColors.push("none")
+    }
+    
+    return res.json(heartColors)
 })
 
 router.get("/u/:userId", verifyJWT, (req, res) => {
@@ -275,6 +291,21 @@ router.post("/updateUserInfo", verifyJWT, (req, res) => {
         {username: req.user.username},
         {$set: {bio: req.body.newBio}},
         (updateRes) => updateRes
+    )
+})
+
+router.post("/addComment", verifyJWT, (req, res) => {
+
+    const commentDetails = {text: req.body.text, author: req.user.username, authorPfp: req.user.pfp}
+
+    Group.findOneAndUpdate(
+        {groupName: req.body.groupName, "courses.url": req.body.courseURL},
+        {"$push": {"courses.$.comments": commentDetails}},
+        {new:true, useFindAndModify: false},
+        (err, group) => {
+            if (err) console.log(err)
+            return res.json(group)
+        }
     )
 })
 
