@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, Redirect } from 'react-router-dom'
-import { useState } from 'react';
+import { Link } from 'react-router-dom'
+import defaultCourseImage from '../assets/defaultCourseImage.png'
 
 function Groups() {
 
@@ -23,7 +23,7 @@ function Groups() {
 
     return (
         <section className="text-gray-400 bg-gray-900 body-font">
-            <h1 className="text-center text-5xl font-extrabold text-green-500">Most Popular</h1>
+            <h1 className="text-center text-4xl sm:text-5xl font-extrabold text-green-500">Most Popular</h1>
             <div className="container px-5 py-12 mx-auto">
                 <div className="flex flex-wrap -m-4 justify-items-center items-center">
                     {groups.map(group => (
@@ -32,10 +32,10 @@ function Groups() {
                                 <h1 className="absolute -my-12 -mx-4">Total Likes - {group.popularity}</h1>
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">Course Bundle</h2>
                                 <h1 className="title-font sm:text-2xl text-xl font-medium text-white mb-3">{group.groupName}</h1>
-                                <div className="grid grid-cols-2 grid-rows-2 gap-2">
+                                <div className="grid grid-cols-2 place-items-center grid-rows-2 gap-2">
                                     {/* Only display images of the first four courses */}
                                     {getFirstFourCourses(group).map(course => (
-                                        <img className="w-full" src={course.ogImage} alt="Custom Course" onError={(e)=>{e.target.onerror = null; e.target.src=""}}/>
+                                        <img className="h-32 w-auto object-cover" src={course.ogImage || defaultCourseImage} alt="Custom Course"/>
                                     ))}
                                 </div>
                                 <Link to={"/g/" + group.routeId} className="text-green-400 inline-flex items-center mt-3">See Courses
