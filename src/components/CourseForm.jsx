@@ -44,13 +44,13 @@ function CourseForm() {
     function removeCourseInput() {
         inputCourses.length > 2
         ? setInputCourses(inputCourses.slice(0, inputCourses.length - 1))
-        : console.log("No less than 2 courses are allowed per group")
+        : setErrorMessage("No less than 2 courses are allowed per group")
     }
 
     function addCourseInput() {
         inputCourses.length < 10
         ? setInputCourses([...inputCourses, inputCourses[inputCourses.length-1]+1])
-        : console.log("No more than 10 courses are allowed per group")
+        : setErrorMessage("No more than 10 courses are allowed per group")
     }
 
     return (
@@ -60,8 +60,8 @@ function CourseForm() {
                 <input className="m-2 border-2 border-green-400 p-2 text-black" id="group-name" name="group-name" type="text"/>
                 {inputCourses.map(courseNum => (
                     <>
-                        <label htmlFor="course-one">URL of Course {courseNum}</label>
-                        <input className="m-2 border-2 border-green-400 p-2 text-black" id="course-two" name="course-one" type="text" required /> 
+                        <label htmlFor={`course-${courseNum}`}>URL of Course {courseNum}</label>
+                        <input className="m-2 border-2 border-green-400 p-2 text-black" id={`course-${courseNum}`} type="text" required /> 
                     </>
                 ))}
                 <input className="px-3 py-1 my-6 text-gray-900 bg-green-400 text-xl font-extrabold rounded-xl" type="submit" value="Submit" />
