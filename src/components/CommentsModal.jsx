@@ -2,6 +2,7 @@ import { useLayoutEffect } from "react";
 import { useState } from "react";
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import ValidationError from "./ValidationError";
 
 function CommentsModal({courseIdx, groupName}) {
 
@@ -14,21 +15,25 @@ function CommentsModal({courseIdx, groupName}) {
     const dispatch = useDispatch();
 
     async function addComment(e) {
-        e.preventDefault();
-        const commentText = e.target[0].value
-        e.target[0].value = ""
+        try {
+            e.preventDefault();
+            const commentText = e.target[0].value
+            e.target[0].value = ""
 
-        const res = await fetch("/addComment", {
-            method: "POST",
-            headers: {
-                "x-access-token": localStorage.getItem("token"),
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({text: commentText, groupName: groupName, courseURL: course.url})
-        })
-        const data = await res.json()
-        setErrorMessage(data.message)
-        dispatch({type: "SET-GROUP", payload: data})
+            const res = await fetch("/addComment", {
+                method: "POST",
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({text: commentText, groupName: groupName, courseURL: course.url})
+            })
+            const data = await res.json()
+            setErrorMessage(data.message)
+            if (!data.message) dispatch({type: "SET-GROUP", payload: data})
+        } catch (err) {
+            setErrorMessage(err)
+        }
     }
 
     useLayoutEffect(() => {
@@ -40,11 +45,17 @@ function CommentsModal({courseIdx, groupName}) {
         })
         .then(res => res.json())
         .then(data => setIsLoggedIn(data.isLoggedIn))
+        .catch(err => setErrorMessage(err))
     }, [])
 
+    function closeModal() {
+        dispatch({type: "CLOSE-COMMENT-MODAL"})
+        setErrorMessage("")
+    }
+
     return (
-        <div className={`px-4 ${isCommentsModalOpen ? "flex": "hidden"} items-center flex-col fixed left-1/2 top-1/2 -mx-96 -my-48 w-192 h-192 bg-white text-black`}>
-            <button className="ml-auto pt-4" onClick={() => dispatch({type: "CLOSE-COMMENT-MODAL"})}>
+        <div className={`px-4 ${isCommentsModalOpen ? "flex": "hidden"} items-center flex-col fixed left-1/2 top-1/2 w-72 h-96 -mx-36 -my-48 sm:w-96 sm:h-192 sm:-mx-52 sm:-my-32 md:-mx-96 md:-my-48 md:w-192 md:h-auto bg-white text-black`}>
+            <button className="ml-auto pt-4" onClick={closeModal}>
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -73,13 +84,13 @@ function CommentsModal({courseIdx, groupName}) {
 
             {isLoggedIn
                 ? <form onSubmit={(e) => addComment(e)} className="m-2">
-                      <input className="border-2 border-green-400 m-2 p-1 rounded-md" type="text" name="" id="" />
-                      <input className="border-green-400 border-2 font-bold text-xl bg-transparent px-2 py-1 text-green-400 rounded-xl" type="submit" value="Add Comment" />
+                      <input className="sm:w-auto w-40 border-2 border-green-400 m-2 p-1 rounded-md" type="text" name="" id="" />
+                      <input className="border-green-400 border-2 font-bold text-xl bg-transparent px-2 py-1 text-green-400 rounded-xl" type="submit" value="Add" />
                   </form>
                 : null 
             }
 
-            <h1>{errorMessage}</h1>
+            <ValidationError message={errorMessage}/>
         </div>
     )
 }

@@ -8,10 +8,11 @@ import PageNotFound from './components/PageNotFound'
 import ProfilePage from './components/ProfilePage'
 import LandingPage from './components/LandingPage'
 import Footer from "./components/Footer";
+import FAQ from "./components/FAQ";
 
 function App() {
     return (
-        <div className="bg-gray-900">
+        <div className="bg-gray-900 min-h-screen">
             <BrowserRouter>
                 <Switch>
                     <Route component={Register} exact path="/register"/>
@@ -19,6 +20,7 @@ function App() {
                     <Route component={GroupPage} exact path="/g/:groupId" />
                     <Route component={ProfilePage} exact path="/u/:userId" />
                     <Route component={HomePage} exact path="/dashboard"/>
+                    <Route component={FAQ} exact path="/FAQ"/>
                     <Route component={LandingPage} exact path="/"/>
                     <Route exact component={PageNotFound}/>
                 </Switch>

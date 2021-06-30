@@ -16,16 +16,20 @@ function Login() {
             password: form[1].value
         }
 
-        const res = await fetch("/login", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(user)
-        })
-        const data = await res.json()
-        localStorage.setItem("token", data.token)
-        setErrorMessage(data.message)
+        try {
+            const res = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(user)
+            })
+            const data = await res.json()
+            localStorage.setItem("token", data.token)
+            setErrorMessage(data.message)
+        } catch(err) {
+            setErrorMessage(err)
+        }
     }
 
     useLayoutEffect(() => {
@@ -36,6 +40,7 @@ function Login() {
         })
         .then(res => res.json())
         .then(data => data.isLoggedIn ? history.push("/dashboard"): null)
+        .catch(err => setErrorMessage(err)) 
     }, [history])
 
     return (
