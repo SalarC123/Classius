@@ -4,26 +4,25 @@ function GroupSearch() {
 
     const dispatch = useDispatch()
 
-    // function search(searchTerm) {
-    //     dispatch({type: "FILTER-GROUPS", payload: groups.filter(item => item.groupName.toLowerCase().includes(searchTerm))})
-    // }
-
     async function search(searchTerm) {
-        const res = await fetch("/searchfilter", {
-            method:"POST",
-            headers: {
-                "Content-type":"application/json",
-            },
-            body: JSON.stringify({searchTerm: searchTerm})
-        })
-        const data = await res.json()
-        dispatch({type: "SET-GROUPS", payload: data})
+        try {
+            const res = await fetch("/searchfilter", {
+                method:"POST",
+                headers: {
+                    "Content-type":"application/json",
+                },
+                body: JSON.stringify({searchTerm: searchTerm})
+            })
+            const data = await res.json()
+            dispatch({type: "SET-GROUPS", payload: data})
+        } catch (err) {
+            alert(err)
+        }
     }
 
     return (
-        <div className="text-white m-8">
-            <label>Search</label>
-            <input className="border-2 border-green-400 p-2 m-2 text-black" type="text" onKeyDown={e => e.which === 13 ? search(e.target.value) : null }/>
+        <div className="text-white m-8 flex flex-row items-center justify-center">
+            <input placeholder="Search all groups" className="border-2 lg:w-96 sm:w-72 w-40 border-green-400 p-2 m-2 text-black" type="text" onKeyDown={e => e.which === 13 ? search(e.target.value) : null }/>
             <svg 
                 /* grabs value of previous element on click */
                 onClick={(e) => search(e.target.parentElement.children[1].value)} 
@@ -31,6 +30,7 @@ function GroupSearch() {
                 className="h-6 w-6 inline-block" fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
+                className="w-8 h-8"
             >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
