@@ -16,6 +16,7 @@ function ProfilePage({ match }) {
         .then(data => {
             setUser(data)
         })
+        .catch(err => alert(err)) 
     }, [userId])
     
     async function changeUserInfo(e) {
@@ -26,18 +27,22 @@ function ProfilePage({ match }) {
         setUser({...user, bio: newBio})
         form[0].value = ""
 
-        await fetch("/updateUserInfo", {
-            method: "POST",
-            headers: {
-                "x-access-token": localStorage.getItem("token"),
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({newBio: newBio})
-        })
+        try {
+            await fetch("/updateUserInfo", {
+                method: "POST",
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({newBio: newBio})
+            })
+        } catch (err) {
+            alert(err)
+        }
     }
     
     return (
-        <div className="min-h-screen">
+        <div className="">
             <Navbar/>
             <div className="bg-gray-900 text-white">
                 <header className="flex flex-row justify-center p-5">
@@ -47,13 +52,13 @@ function ProfilePage({ match }) {
                 {user.username === "User Not Found" 
                 ? null
                 : <>
-                    <h1 className="text-4xl px-10 font-bold">Bio</h1>
-                    <div className="text-xl px-16 py-5 break-words">{user.bio}</div>
-                    <h1 className="text-4xl px-10 font-bold">Created Groups</h1>
+                    <h1 className="text-center text-3xl px-10 font-bold sm:text-4xl underline">Biography</h1>
+                    <div className="w-5/6 md:w-192 ml-auto mr-auto text-xl py-5 break-words mb-10">{user.bio}</div>
+                    <h1 className="text-center text-3xl px-10 mb-10 font-bold sm:text-4xl underline">Created Groups</h1>
                     <div className="break-words grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-4 m-4">
                         {user.createdGroups
                         ? user.createdGroups.map(group => (
-                            <Link className="border-4 border-white rounded p-3 hover:opacity-70" to={group.url}>{group.groupName}</Link>
+                            <Link className="bg-gray-800 bg-opacity-40 rounded p-5 hover:opacity-50" to={group.url}>{group.groupName}</Link>
                         ))
                         : <div>Loading...</div>}
                     </div>
@@ -63,7 +68,7 @@ function ProfilePage({ match }) {
                 {user.canEdit 
                 ? <form onSubmit={(e) => changeUserInfo(e)} className="flex flex-col mx-8 items-center">
                       <label className="text-2xl font-extrabold py-2" htmlFor="bio">Change Bio</label>
-                      <textarea className="text-black p-1 w-192 h-72" maxLength="1000" name="bio" id="bio" />
+                      <textarea className="text-black p-1 sm:w-96 w-72 lg:w-192 h-72" maxLength="1000" name="bio" id="bio" />
                       {/* <label htmlFor="pfp"></label>
                       <input type="file" id="pfp" name="pfp" accept="image/*"/> */}
                       <input className="m-1 px-2 py-1 rounded font-bold text-xl w-52 bg-green-400 text-gray-900" type="submit" value="Submit" />
