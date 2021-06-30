@@ -3,7 +3,9 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const cors = require('cors')
-const router = require("./router.js")
+const groupRoutes = require("./routes/groupRoutes")
+const authRoutes = require("./routes/authRoutes")
+const userRoutes = require("./routes/userRoutes")
 
 const app = express()
 
@@ -13,7 +15,9 @@ app.use(cors())
 const urlencodedParser = bodyParser.urlencoded({ extended: false })
 app.use(bodyParser.json(), urlencodedParser)
 
-app.use("/", router)
+app.use("/", groupRoutes)
+app.use("/", authRoutes)
+app.use("/", userRoutes)
 
 // connects to mongoDB database
 const dbURI = `mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPASSWORD}@classius.zc7oh.mongodb.net/Classius?retryWrites=true&w=majority`
