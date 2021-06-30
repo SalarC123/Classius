@@ -13,22 +13,23 @@ function Register () {
         const form = e.target
         const user = {
             username: form[0].value,
-            email: form[1].value,
-            password: form[2].value
+            password: form[1].value,
+            confirmPassword: form[2].value
         }
 
-        const res = await fetch("/register", {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(user)
-        })
-        const data = await res.json()
-        setErrorMessage(data.message)
-        // if (errorMessage === "Success") {
-        //     await history.push("/login")
-        // }
+        try {
+            const res = await fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify(user)
+            })
+            const data = await res.json()
+            setErrorMessage(data.message)
+        } catch (err) {
+            setErrorMessage(err)
+        }
     }
 
     useLayoutEffect(() => {
@@ -39,6 +40,7 @@ function Register () {
         })
         .then(res => res.json())
         .then(data => data.isLoggedIn ? history.push("/dashboard"): null)
+        .catch(err => setErrorMessage(err)) 
     }, [history])
 
     return (
@@ -47,9 +49,9 @@ function Register () {
             <form className="mx-5 flex flex-col w-72" onSubmit={(e) => handleRegister(e)}>
                 <label htmlFor="username">Username</label>
                 <input className="text-black m-3 border-2 border-green-400 p-1" type="text" name="username" id="username" />
-                <label htmlFor="email">Email</label>
-                <input className="text-black m-3 border-2 border-green-400 p-1" type="text" name="email" id="email" />
                 <label htmlFor="password">Password</label>
+                <input className="text-black m-3 border-2 border-green-400 p-1" type="password" name="password" id="password" />
+                <label htmlFor="password">Confirm Password</label>
                 <input className="text-black m-3 border-2 border-green-400 p-1" type="password" name="password" id="password" />
                 <input className="m-1 px-2 py-1 rounded font-bold text-xl bg-green-400 text-gray-900" type="submit" value="Register" />
                 <div className="flex flex-row items-center justify-center">
