@@ -28,7 +28,7 @@
   },
   "scripts": {
     "watch": "nodemon ./src/server/server.js",
-    "start": "craco start && npm run watch",
+    "start": "npm install && npm run build && npm run watch && craco start",
     "build": "craco build",
     "install-client": "npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
