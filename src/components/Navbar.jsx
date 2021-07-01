@@ -49,7 +49,7 @@ function Navbar() {
                 }
             </section>
             <div className="flex flex-row p-10 justify-end text-2xl text-white">
-                <a href="/dashboard" className="mr-auto font-extrabold text-2xl z-50">Classius</a>
+                <a href="/" className="mr-auto font-extrabold text-2xl z-50">Classius</a>
                 <div className="hidden sm:flex mx-3 hover:text-green-300"><Link to="/dashboard">Home</Link></div>
                 <div className="hidden sm:flex mx-3 hover:text-green-300"><Link to="/FAQ">FAQ</Link></div>
                 {username  
