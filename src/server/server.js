@@ -6,10 +6,14 @@ const cors = require('cors')
 const groupRoutes = require("./routes/groupRoutes")
 const authRoutes = require("./routes/authRoutes")
 const userRoutes = require("./routes/userRoutes")
+const path = require("path")
 
 const app = express()
 
 app.use(cors())
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '.../build')))
+}
 
 // use bodyparser middleware to receive form data
 const urlencodedParser = bodyParser.urlencoded({ extended: false })

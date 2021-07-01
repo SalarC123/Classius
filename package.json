@@ -30,6 +30,8 @@
     "watch": "nodemon ./src/server/server.js",
     "start": "craco start",
     "build": "craco build",
+    "install-client": "npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
