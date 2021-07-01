@@ -27,7 +27,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "nodemon ./src/server/server.js",
+    "start": "node ./src/server/server.js",
     "clientStart": "craco start",
     "build": "craco build",
     "heroku-postbuild": "npm install && npm run build",
