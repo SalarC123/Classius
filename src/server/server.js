@@ -24,10 +24,10 @@ app.use("/", authRoutes)
 app.use("/", userRoutes)
 
 // connects to mongoDB database
-const dbURI = `mongodb+srv://${process.env.MONGOUSERNAME}:${process.env.MONGOPASSWORD}@classius.zc7oh.mongodb.net/Classius?retryWrites=true&w=majority`
+const dbURI = process.env.MONGODB_URI
 mongoose.connect(dbURI, { useNewUrlParser:true, useUnifiedTopology:true })
     .then((res) => {
         // only listen for requests once database data has loaded
-        app.listen(process.env.SERVERPORT, () => console.log("Server is up on port " + process.env.SERVERPORT))
+        app.listen(process.env.SERVERPORT || 5000, () => console.log("Server is up on port " + process.env.SERVERPORT))
     })
     .catch(err => console.log(err))
