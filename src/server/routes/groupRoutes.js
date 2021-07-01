@@ -6,6 +6,8 @@ const User = require("../models/users")
 const ProfanityOptions = require("@2toad/profanity").ProfanityOptions
 const Profanity = require("@2toad/profanity").Profanity
 const groupValidation = require("../validation").groupValidation
+const fs = require("fs")
+const {v1: uuidv1} = require("uuid")
 
 const options = new ProfanityOptions();
 options.grawlix = '*****'
@@ -156,10 +158,10 @@ router.post("/setHeartColors", verifyJWT, async (req, res) => {
     return res.json(heartColors)
 })
 
-router.post("/addComment", verifyJWT, (req, res) => {
+router.post("/addComment", verifyJWT, async (req, res) => {
 
     // check if user has reached the comment limit
-    Group.aggregate([
+    const userList = await Group.aggregate([
         { $match: {groupName: req.body.groupName}},
         { $unwind: "$courses" },
         { $unwind: "$courses.comments" },
@@ -170,12 +172,10 @@ router.post("/addComment", verifyJWT, (req, res) => {
             count: { $sum: 1 }
         }}
     ])
-    .then(userList => {
-        const user = userList[0]
-        if (user?.count >= 20 ) {
-            return res.json({message: req.user.username + " has reached the comment limit of 20 comments per course"})
-        }
-    })
+    const user = userList[0];
+    if (user?.count >= 200 ) {
+        return res.json({message: req.user.username + " has reached the comment limit of 200 comments per course bundle"})
+    }
 
 
     let comment = req.body.text;
@@ -184,7 +184,8 @@ router.post("/addComment", verifyJWT, (req, res) => {
     const commentDetails = {
         text: comment, 
         author: req.user.username, 
-        authorPfp: req.user.pfp
+        authorPfp: req.user.pfp,
+        id: uuidv1(),
     }
 
     Group.findOneAndUpdate(
@@ -197,6 +198,15 @@ router.post("/addComment", verifyJWT, (req, res) => {
             return res.json(group)
         }
     )
+})
+
+const logger = fs.createWriteStream('feedback.txt', {
+    flags: "a"
+})
+
+router.post("/sendFeedback", (req, res) => {
+    logger.write(req.body.feedback)
+    logger.write("\n --------------- \n")
 })
 
 

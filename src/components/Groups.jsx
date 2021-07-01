@@ -27,7 +27,7 @@ function Groups() {
             <div className="container px-5 py-12 mx-auto">
                 <div className="flex flex-wrap -m-4 justify-items-center items-center">
                     {groups.map(group => (
-                        <div className="p-4 w-full h-full lg:w-1/2 xl:w-1/3">
+                        <div key={group._id} className="p-4 w-full h-full lg:w-1/2 xl:w-1/3">
                             <div className="h-full bg-gray-800 bg-opacity-40 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative">
                                 <h1 className="absolute -my-12 -mx-4">Total Likes - {group.popularity}</h1>
                                 <h2 className="tracking-widest text-xs title-font font-medium text-gray-500 mb-1">Course Bundle</h2>
@@ -35,7 +35,7 @@ function Groups() {
                                 <div className="grid grid-cols-2 place-items-center grid-rows-2 gap-2">
                                     {/* Only display images of the first four courses */}
                                     {getFirstFourCourses(group).map(course => (
-                                        <img className="h-32 w-auto object-cover" src={course.ogImage || defaultCourseImage} alt="Custom Course"/>
+                                        <img key={course._id} className="h-32 w-auto object-cover" src={course.ogImage || defaultCourseImage} alt="Custom Course"/>
                                     ))}
                                 </div>
                                 <Link to={"/g/" + group.routeId} className="text-green-400 inline-flex items-center mt-3">See Courses

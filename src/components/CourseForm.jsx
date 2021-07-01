@@ -1,4 +1,5 @@
 import { useState } from "react";
+import React from 'react'
 import { Redirect } from "react-router";
 import ValidationError from "./ValidationError";
 import LoadingModal from './LoadingModal'
@@ -45,13 +46,15 @@ function CourseForm() {
         }
     }
 
-    function removeCourseInput() {
+    function removeCourseInput(e) {
+        e.preventDefault()
         inputCourses.length > 2
         ? setInputCourses(inputCourses.slice(0, inputCourses.length - 1))
         : setErrorMessage("No less than 2 courses are allowed per group")
     }
 
-    function addCourseInput() {
+    function addCourseInput(e) {
+        e.preventDefault()
         inputCourses.length < 10
         ? setInputCourses([...inputCourses, inputCourses[inputCourses.length-1]+1])
         : setErrorMessage("No more than 10 courses are allowed per group")
@@ -64,18 +67,18 @@ function CourseForm() {
                 <label htmlFor="group-name">Group Name</label>
                 <input className="m-2 border-2 border-green-400 p-2 text-black" id="group-name" name="group-name" type="text"/>
                 {inputCourses.map(courseNum => (
-                    <>
+                    <React.Fragment key={courseNum}>
                         <label htmlFor={`course-${courseNum}`}>URL of Course {courseNum}</label>
                         <input className="m-2 border-2 border-green-400 p-2 text-black" id={`course-${courseNum}`} type="text" required /> 
-                    </>
+                    </React.Fragment>
                 ))}
                 <input className="px-3 py-1 my-6 ml-auto mr-auto text-gray-900 w-32 bg-green-400 text-xl font-extrabold rounded-xl" type="submit" value="Submit" />
 
                 <div className="flex flex-col sm:flex-row sm:justify-center items-center">
-                    <button onClick={addCourseInput} className="text-xl border-2 border-green-400 p-1 w-52 rounded-xl m-2 text-green-400" >
+                    <button onClick={(e) => addCourseInput(e)} className="text-xl border-2 border-green-400 p-1 w-52 rounded-xl m-2 text-green-400" >
                         Add Course
                     </button>
-                    <button onClick={removeCourseInput} className="text-xl border-2 border-green-400 p-1 w-52 rounded-xl m-2 text-green-400" >
+                    <button onClick={(e) => removeCourseInput(e)} className="text-xl border-2 border-green-400 p-1 w-52 rounded-xl m-2 text-green-400" >
                         Remove Course
                     </button>
                 </div>

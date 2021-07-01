@@ -58,7 +58,7 @@ function ProfilePage({ match }) {
                     <div className="break-words grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-4 m-4">
                         {user.createdGroups
                         ? user.createdGroups.map(group => (
-                            <Link className="bg-gray-800 bg-opacity-40 rounded p-5 hover:opacity-50" to={group.url}>{group.groupName}</Link>
+                            <Link key={group._id} className="bg-gray-800 bg-opacity-40 rounded p-5 hover:opacity-50" to={group.url}>{group.groupName}</Link>
                         ))
                         : <div>Loading...</div>}
                     </div>
