@@ -103,10 +103,10 @@ function GroupPage({ match }) {
                 <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 py-2 mx-4 place-items-center">
                     {group.courses
                         ? group.courses.map((course, index) => (
-                            <div className="rounded-xl p-5 flex flex-col items-center bg-gray-800 bg-opacity-40">
+                            <div key={course._id} className="rounded-xl p-5 flex flex-col items-center bg-gray-800 bg-opacity-40">
                                 <a href={course.url} target="_blank" rel="noreferrer" className="hover:underline font-bold text-2xl mb-2 text-center">{course.ogTitle}</a>
                                 <p className="text-gray-400 mb-4 text-md">{course.ogSiteName}</p>
-                                <img className="w-60 h-42 mb-4" src={course.ogImage || defaultCourseImage} alt="" />
+                                <img className="w-auto max-h-48 object-cover mb-4" src={course.ogImage || defaultCourseImage} alt="" />
                                 <div className="mb-2 text-lg text-center">{course.ogDesc}</div>
                                 {isLoggedIn
                                 ? <svg onClick={() => updateLikes(group.groupName, course, index)} xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 cursor-pointer" fill={heartColors[index]} viewBox="0 0 24 24" stroke="currentColor">
