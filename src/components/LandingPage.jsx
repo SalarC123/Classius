@@ -3,8 +3,16 @@ import landingConfused from '../assets/landingConfused.svg'
 import landingPath from '../assets/landingPath.svg'
 import Navbar from './Navbar'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
 
 function LandingPage() {
+
+    useEffect(() => {
+        fetch("/api/groups")
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+    })
 
     return (
         <div>
