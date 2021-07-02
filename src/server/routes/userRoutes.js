@@ -4,7 +4,7 @@ const verifyJWT = require("../verifyJWT")
 
 const router = express.Router()
 
-router.get("/u/:userId", verifyJWT, (req, res) => {
+router.get("https://classius.herokuapp.com/u/:userId", verifyJWT, (req, res) => {
     const username = req.params.userId;
 
     User.findOne({username: username})
@@ -23,7 +23,7 @@ router.get("/u/:userId", verifyJWT, (req, res) => {
     }))
 })
 
-router.post("/updateUserInfo", verifyJWT, (req, res) => {
+router.post("https://classius.herokuapp.com/updateUserInfo", verifyJWT, (req, res) => {
     User.updateOne(
         {username: req.user.username},
         {$set: {bio: req.body.newBio}},
