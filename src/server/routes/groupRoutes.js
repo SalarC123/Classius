@@ -15,7 +15,7 @@ const profanity = new Profanity(options)
 
 const router = express.Router()
 
-router.get("https://classius.herokuapp.com/groups", (req, res) => {
+router.get("/groups", (req, res) => {
     Group.find().sort({popularity: "descending"}).limit(50)
     .then(groups => res.json(groups))
     .catch(err => console.log(err))
@@ -27,7 +27,7 @@ function routify(text) {
     return lowerCaseText.replace(/ /g, "-")
 }
 
-router.post("https://classius.herokuapp.com/creategroup", verifyJWT, async (req, res) => {
+router.post("/creategroup", verifyJWT, async (req, res) => {
     
     const currentUser = req.user;
     const routifiedGroupName = routify(req.body.groupName)
@@ -63,7 +63,7 @@ router.post("https://classius.herokuapp.com/creategroup", verifyJWT, async (req,
             // add this group to the user's "created groups" list on their profile
             User.updateOne(
                 {username: currentUser.username},
-                {$push: {createdGroups: {groupName: req.body.groupName, url: "https://classius.herokuapp.com/g/" + routifiedGroupName}}},
+                {$push: {createdGroups: {groupName: req.body.groupName, url: "/g/" + routifiedGroupName}}},
                 updateRes => updateRes
             )
 
@@ -90,20 +90,20 @@ router.post("https://classius.herokuapp.com/creategroup", verifyJWT, async (req,
     }
 )
 
-router.get("https://classius.herokuapp.com/g/:groupId", (req, res) => {
+router.get("/g/:groupId", (req, res) => {
     Group.find({routeId: req.params.groupId})
     .then(result => res.json(result))
     .catch(err => res.json({message: err}))
 })
 
-router.post("https://classius.herokuapp.com/searchfilter", (req, res) => {
+router.post("/searchfilter", (req, res) => {
     const searchTerm = req.body.searchTerm;
     Group.find( {groupName: {"$regex": ""+searchTerm, "$options": "i"}})
     .then(groups => res.json(groups))
     .catch(err => console.log(err))
 })
 
-router.post("https://classius.herokuapp.com/updateLikes", verifyJWT, (req, res) => {
+router.post("/updateLikes", verifyJWT, (req, res) => {
     const currentUser = req.user
 
     const groupName = req.body.groupName
@@ -144,7 +144,7 @@ router.post("https://classius.herokuapp.com/updateLikes", verifyJWT, (req, res) 
     }
 })
 
-router.post("https://classius.herokuapp.com/setHeartColors", verifyJWT, async (req, res) => {
+router.post("/setHeartColors", verifyJWT, async (req, res) => {
     const heartColors = []
     const currentUser = req.user
 
@@ -158,7 +158,7 @@ router.post("https://classius.herokuapp.com/setHeartColors", verifyJWT, async (r
     return res.json(heartColors)
 })
 
-router.post("https://classius.herokuapp.com/addComment", verifyJWT, async (req, res) => {
+router.post("/addComment", verifyJWT, async (req, res) => {
 
     // check if user has reached the comment limit
     const userList = await Group.aggregate([
@@ -204,7 +204,7 @@ const logger = fs.createWriteStream('feedback.txt', {
     flags: "a"
 })
 
-router.post("https://classius.herokuapp.com/sendFeedback", (req, res) => {
+router.post("/sendFeedback", (req, res) => {
     logger.write(req.body.feedback)
     logger.write("\n --------------- \n")
 })

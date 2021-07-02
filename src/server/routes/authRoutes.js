@@ -8,11 +8,11 @@ const {registrationValidation, loginValidation } = require("../validation")
 
 const router = express.Router()
 
-router.get("https://classius.herokuapp.com/isUserAuth", verifyJWT, (req, res) => {
+router.get("/isUserAuth", verifyJWT, (req, res) => {
     return res.json({isLoggedIn: true, username: req.user.username})
 })
 
-router.post("https://classius.herokuapp.com/login", (req, res) => {
+router.post("/login", (req, res) => {
     
     const userLoggingIn = req.body;
 
@@ -53,7 +53,7 @@ router.post("https://classius.herokuapp.com/login", (req, res) => {
     }
 })
 
-router.post("https://classius.herokuapp.com/register", async (req, res) => {
+router.post("/register", async (req, res) => {
     const user = req.body;
 
     const takenUsername = await User.findOne({username: user.username.toLowerCase()})
