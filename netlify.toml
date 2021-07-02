@@ -1,3 +1,14 @@
 [build]
   publish = "build/"
   command = "CI= npm run build"
+
+[[redirects]]
+  from= "/api/*"
+  to = "https://classius.herokuapp.com/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from= "/*"
+  to = "/index.html"
+  status = 200
