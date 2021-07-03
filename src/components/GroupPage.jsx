@@ -17,7 +17,7 @@ function GroupPage({ match }) {
     useEffect(() => {
         fetch("/api/g/" + groupId)
         .then(res => res.json())
-        .then(data => dispatch({type: "SET-GROUP", payload: data[0]}))
+        .then(data => dispatch({type: "SET-GROUP", payload: data[0] || ""}))
         .catch(err => alert(err))
     }, [groupId, dispatch])
 

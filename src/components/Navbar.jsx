@@ -24,7 +24,7 @@ function Navbar() {
         .catch(err => alert(err)) 
     }, [])
 
-    function toggleMobileMenu() {
+    const toggleMobileMenu = () => {
         if (mobileMenuPosition === mobileMenuMargin) {
             setMobileMenuPosition("0")
         } else {
@@ -34,7 +34,7 @@ function Navbar() {
 
     return (
         <>
-            <section className={`text-white flex flex-col w-screen justify-center items-center sm:hidden absolute transition-all duration-500  -my-${mobileMenuPosition} z-30 h-screen bg-gray-900`}>
+            <section className={`text-white flex flex-col w-screen justify-center items-center sm:hidden fixed transition-all duration-500  -my-${mobileMenuPosition} z-30 h-screen bg-gray-900`}>
                 <div className="mx-3 text-3xl hover:text-green-300"><Link to="/dashboard">Home</Link></div>
                 <div className="mx-3 text-3xl hover:text-green-300 mt-10"><Link to="/FAQ">FAQ</Link></div>
                 {username  
@@ -42,7 +42,7 @@ function Navbar() {
                         <Link to={"/u/" + username} className="my-10 cursor-pointer mx-3 hover:text-green-300">Profile</Link>
                         <div className="cursor-pointer mx-3 hover:text-green-300" onClick={logout}>Logout</div>
                     </div>  
-                    : <div className="flex absolute bottom-3">
+                    : <div className="flex my-10">
                         <div className="mx-3 px-2 py-1 rounded font-bold text-xl bg-green-400 text-gray-900"><Link to="/login">Login</Link></div>
                         <div className="mx-3 px-2 py-1 rounded font-bold text-xl border-2 border-green-400 text-green-400"><Link to="/register">Register</Link></div>
                     </div>
