@@ -39,8 +39,8 @@ function Navbar() {
 
     return (
         <>
-            <section className={`text-white flex flex-col w-screen justify-center items-center sm:hidden fixed transition-all duration-500 -my-${mobileMenuPosition} z-30 h-screen bg-gray-900`}>
-                <div className="mx-3 text-3xl hover:text-green-300"><Link to="/dashboard">Home</Link></div>
+            <section className={`text-white flex flex-col w-screen justify-cay-900`}>
+enter items-center sm:hidden fixed transition-all duration-500 -my-${mobileMenuPosition} z-30 h-screen bg-gr                <div className="mx-3 text-3xl hover:text-green-300"><Link to="/dashboard">Home</Link></div>
                 <div className="mx-3 text-3xl hover:text-green-300 mt-10"><Link to="/FAQ">FAQ</Link></div>
                 {username  
                     ? <div className="text-3xl flex flex-col">
