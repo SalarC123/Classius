@@ -60,7 +60,7 @@ function ProfilePage({ match }) {
                         ? user.createdGroups.map(group => (
                             <Link key={group._id} className="bg-gray-800 bg-opacity-40 rounded p-5 hover:opacity-50" to={group.url}>{group.groupName}</Link>
                         ))
-                        : <div>Loading...</div>}
+                        : <div className="w-screen h-screen z-10 bg-gray-900 text-center text-4xl">Loading...</div>}
                     </div>
                   </>
                 }
