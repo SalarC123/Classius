@@ -1,10 +1,10 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}',
-          './src/components/**/*.jsx',
-          './src/components/**/*.js',
-          './public/index.html',
-
-  ],
+  purge: {
+    content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+    options: {
+      safelist: ['-my-fullscreen', '-my-0']
+    }
+  },
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
