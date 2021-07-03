@@ -14,7 +14,7 @@ function Navbar() {
     }
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }

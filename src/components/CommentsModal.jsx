@@ -19,7 +19,7 @@ function CommentsModal({courseIdx, groupName}) {
             const commentText = e.target[0].value
             e.target[0].value = ""
 
-            const res = await fetch("/addComment", {
+            const res = await fetch("/api/addComment", {
                 method: "POST",
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
@@ -36,7 +36,7 @@ function CommentsModal({courseIdx, groupName}) {
     }
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token"),
                 "Content-type": "application/json"

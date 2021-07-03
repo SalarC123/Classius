@@ -18,7 +18,7 @@ function Register () {
         }
 
         try {
-            const res = await fetch("/register", {
+            const res = await fetch("/api/register", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
@@ -33,7 +33,7 @@ function Register () {
     }
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }

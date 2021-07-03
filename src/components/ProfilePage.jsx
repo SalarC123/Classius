@@ -7,7 +7,7 @@ function ProfilePage({ match }) {
     const [user, setUser] = useState({})
 
     useEffect(() => {
-        fetch("/u/" + userId, {
+        fetch("/api/u/" + userId, {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
@@ -28,7 +28,7 @@ function ProfilePage({ match }) {
         form[0].value = ""
 
         try {
-            await fetch("/updateUserInfo", {
+            await fetch("/api/updateUserInfo", {
                 method: "POST",
                 headers: {
                     "x-access-token": localStorage.getItem("token"),
@@ -70,7 +70,7 @@ function ProfilePage({ match }) {
                       <label className="text-2xl font-extrabold py-2" htmlFor="bio">Change Bio</label>
                       <textarea className="text-black p-1 sm:w-96 w-72 lg:w-192 h-72" maxLength="1000" name="bio" id="bio" />
                       {/* <label htmlFor="pfp"></label>
-                      <input type="file" id="pfp" name="pfp" accept="image/*"/> */}
+                      <input type="file" id="pfp" name="pfp" accept="image/*"/api/> */}
                       <input className="m-1 px-2 py-1 rounded font-bold text-xl w-52 bg-green-400 text-gray-900" type="submit" value="Submit" />
                       <p className="text-sm my-1">1000 characters maximum</p>
                   </form>

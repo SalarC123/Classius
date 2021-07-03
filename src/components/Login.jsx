@@ -17,7 +17,7 @@ function Login() {
         }
 
         try {
-            const res = await fetch("/login", {
+            const res = await fetch("/api/login", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
@@ -33,7 +33,7 @@ function Login() {
     }
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
