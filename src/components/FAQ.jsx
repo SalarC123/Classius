@@ -42,7 +42,7 @@ function FAQ() {
                 <section className="pl-4 border-l-4 border-green-400 mb-10">
                     <h1 className="text-3xl font-bold">I found a bug. Who do I tell?</h1>
                     <p className="pl-10 m-2 text-lg">
-                        If you find a bug, please go to<a href="https://github.com/salarc123/classius">Classius's github page </a> 
+                        If you find a bug, please go to <a href="https://github.com/salarc123/classius">Classius's github page </a> 
                         and describe the problem in the issues tab, and if you would like to make any 
                         direct changes, you can also make a pull request because this project is currently
                         open sourced. If you would like to leave any other feedback or send any questions to be 
