@@ -24,7 +24,12 @@ function Navbar() {
         .catch(err => alert(err)) 
     }, [])
 
-    const toggleMobileMenu = () => {
+    function toggleMobileMenu() {
+        /*
+            PurgeCSS: 
+            * -my-fullscreen
+            * -my-0
+        */
         if (mobileMenuPosition === mobileMenuMargin) {
             setMobileMenuPosition("0")
         } else {
@@ -34,7 +39,7 @@ function Navbar() {
 
     return (
         <>
-            <section className={`text-white flex flex-col w-screen justify-center items-center sm:hidden fixed transition-all duration-500  -my-${mobileMenuPosition} z-30 h-screen bg-gray-900`}>
+            <section className={`text-white flex flex-col w-screen justify-center items-center sm:hidden fixed transition-all duration-500 -my-${mobileMenuPosition} z-30 h-screen bg-gray-900`}>
                 <div className="mx-3 text-3xl hover:text-green-300"><Link to="/dashboard">Home</Link></div>
                 <div className="mx-3 text-3xl hover:text-green-300 mt-10"><Link to="/FAQ">FAQ</Link></div>
                 {username  
