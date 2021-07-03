@@ -15,14 +15,14 @@ function GroupPage({ match }) {
     const [toggledLikes, setToggledLikes] = useState([])
 
     useEffect(() => {
-        fetch("/g/" + groupId)
+        fetch("/api/g/" + groupId)
         .then(res => res.json())
         .then(data => dispatch({type: "SET-GROUP", payload: data[0]}))
         .catch(err => alert(err))
     }, [groupId, dispatch])
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }
@@ -36,7 +36,7 @@ function GroupPage({ match }) {
     }, [dispatch])
     
     useLayoutEffect(() => {
-        fetch("/setHeartColors", {
+        fetch("/api/setHeartColors", {
             method: "POST",
             headers: {
                 "x-access-token": localStorage.getItem("token"),
@@ -57,7 +57,7 @@ function GroupPage({ match }) {
     async function updateLikes(groupName, course, courseIdx) {
         toggleLike(courseIdx);
 
-        fetch("/updateLikes", {
+        fetch("/api/updateLikes", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",

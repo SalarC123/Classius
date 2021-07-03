@@ -10,7 +10,7 @@ function HomePage() {
     const [username, setUsername] = useState(null)
 
     useLayoutEffect(() => {
-        fetch("/isUserAuth", {
+        fetch("/api/isUserAuth", {
             headers: {
                 "x-access-token": localStorage.getItem("token")
             }

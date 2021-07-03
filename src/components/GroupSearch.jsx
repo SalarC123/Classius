@@ -6,7 +6,7 @@ function GroupSearch() {
 
     async function search(searchTerm) {
         try {
-            const res = await fetch("/searchfilter", {
+            const res = await fetch("/api/searchfilter", {
                 method:"POST",
                 headers: {
                     "Content-type":"application/json",

@@ -8,7 +8,7 @@ function FAQ() {
         const feedback = form[0].value;
         e.target[0].value = "";
 
-        fetch("/sendFeedback", {
+        fetch("/api/sendFeedback", {
             method: 'POST',
             headers: {
                 "Content-type": "application/json"

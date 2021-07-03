@@ -27,7 +27,7 @@ function CourseForm() {
         const groupFormData = {groupName: groupName, courses: courses}
 
         try {
-            let res = await fetch("/creategroup", {
+            let res = await fetch("/api/creategroup", {
                 method:"POST",
                 headers: {
                     'Content-type': 'application/json',

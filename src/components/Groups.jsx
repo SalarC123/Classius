@@ -9,7 +9,7 @@ function Groups() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        fetch("/groups")
+        fetch("/api/groups")
         .then(res => res.json())
         .then(data => {
             dispatch({type: "SET-GROUPS", payload: data})
