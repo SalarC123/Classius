@@ -5,6 +5,10 @@ function GroupSearch() {
     const dispatch = useDispatch()
 
     async function search(searchTerm) {
+        if (searchTerm === undefined) {
+            alert("Try Again")
+            return;
+        }
         try {
             const res = await fetch("/api/searchfilter", {
                 method:"POST",
@@ -25,7 +29,7 @@ function GroupSearch() {
             <input placeholder="Search all groups" className="border-2 lg:w-96 sm:w-72 w-40 border-green-400 p-2 m-2 text-black" type="text" onKeyDown={e => e.which === 13 ? search(e.target.value) : null }/>
             <svg 
                 /* grabs value of previous element on click */
-                onClick={(e) => search(e.target.parentElement.children[1].value)} 
+                onClick={(e) => search(e.target.previousElementSibling?.value)} 
                 xmlns="http://www.w3.org/2000/svg" 
                 fill="none" 
                 viewBox="0 0 24 24" 
