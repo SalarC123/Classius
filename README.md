@@ -1,7 +1,7 @@
 # Classius
 
 <p align="center">
-  <img width="115" height="100" src="./src/assets/classiusLogo.png" title="Classius">
+  <img width="150" height="100" src="./src/assets/classiusLogo.png" title="Classius">
 </p>
 
 ## Tech Stack (MERN)
